@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta de colores premium para tienda de ropa */
+  --color-primary: #1a1a2e;        /* Negro profundo */
+  --color-secondary: #e94560;      /* Rojo/coral vibrante */
+  --color-accent: #0f3460;         /* Azul oscuro elegante */
+  --color-surface: #f8f9fa;        /* Gris claro superficie */
+  --color-surface-dark: #16213e;   /* Superficie oscura */
+  --color-muted: #6c757d;          /* Texto secundario */
+  --color-success: #2ecc71;        /* Verde éxito */
+  --color-warning: #f39c12;        /* Amarillo advertencia */
+  --color-danger: #e74c3c;         /* Rojo error */
+  
+  /* Tipografía premium */
+  --font-display: "Playfair Display", serif;  /* Títulos elegantes */
+  --font-body: "Inter", sans-serif;           /* Cuerpo legible */
+  
+  /* Espaciado y bordes consistentes */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  
+  /* Sombras con profundidad */
+  --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07);
+  --shadow-medium: 0 4px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+  
+  /* Transiciones suaves */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Transiciones globales de página */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-out-expo);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* Estilos de scroll personalizados */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  overflow-x: hidden;
+}
