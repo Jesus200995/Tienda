@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSettingsStore } from '../../stores/settings'
-import { Facebook, Instagram, MessageSquare } from 'lucide-vue-next'
+import { Facebook, Instagram, MessageSquare, ShoppingCart } from 'lucide-vue-next'
 
 const settingsStore = useSettingsStore()
 </script>
@@ -11,10 +11,10 @@ const settingsStore = useSettingsStore()
       
       <!-- Brand Description -->
       <div class="space-y-4">
-        <h3 class="text-lg font-display font-bold tracking-wider text-white">
-          🛍️ EL COMERCIAMBRE
+        <h3 class="text-lg font-display font-bold tracking-wider text-white flex items-center gap-2">
+          <ShoppingCart class="w-5 h-5 text-secondary" /> EL COMERCIAMBRE
         </h3>
-        <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
+        <p class="text-slate-400 text-xs leading-normal max-w-sm">
           Tu tienda de ropa favorita de corte premium y estilo de vida streetwear. Ropa que define tu identidad, diseñada y fabricada con la máxima calidad.
         </p>
         

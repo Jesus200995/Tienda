@@ -18,6 +18,19 @@ export interface ProductVariant {
   sku: string;
 }
 
+export interface ProductOffer {
+  id: string;           // UUID único
+  product_id: number;   // Producto en oferta
+  offer_price: number;  // Precio de oferta
+  original_price: number; // Precio original
+  discount_percent: number; // Porcentaje de descuento
+  starts_at: string;    // ISO date de inicio
+  ends_at: string;      // ISO date de fin
+  active: boolean;      // Estado de la oferta
+  is_lightning?: boolean; // Oferta Relámpago
+  created_at: string;
+}
+
 export interface Product {
   id: number;
   category_id: number;
@@ -31,6 +44,7 @@ export interface Product {
   active: boolean;
   images: ProductImage[];
   variants: ProductVariant[];
+  current_offer?: ProductOffer;
   created_at: string;
 }
 
@@ -49,6 +63,7 @@ export interface CartItem {
   product: Product;
   variant?: ProductVariant; // variant selected (if any)
   quantity: number;
+  selected: boolean; // selected for checkout
 }
 
 export interface User {
@@ -61,6 +76,13 @@ export interface User {
 }
 
 export type OrderStatus = 'pending' | 'paid' | 'preparing' | 'shipped' | 'delivered' | 'cancelled';
+
+export interface OrderStatusEntry {
+  status: OrderStatus;
+  timestamp: string;
+  note?: string;
+  updatedBy?: string;
+}
 
 export interface OrderItem {
   id: number;
@@ -91,6 +113,7 @@ export interface Order {
   user_id: number;
   order_number: string;
   status: OrderStatus;
+  status_history?: OrderStatusEntry[];
   subtotal: number;
   shipping_cost: number;
   total: number;
@@ -132,3 +155,15 @@ export interface Settings {
   free_shipping_min?: number;
   shipping_cost?: number;
 }
+
+export interface Notification {
+  id: string;
+  type: 'order_status' | 'payment' | 'shipping' | 'offer' | 'general';
+  title: string;
+  message: string;
+  orderId?: number;
+  productId?: number;
+  read: boolean;
+  createdAt: string;
+}
+

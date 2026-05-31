@@ -50,7 +50,7 @@ const navigateToCategory = (slug: string) => {
             {{ categories[0].name }}
             <ArrowUpRight class="w-5 h-5 opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all duration-300" />
           </h3>
-          <p class="text-xs text-slate-300 leading-relaxed font-medium">
+          <p class="text-xs text-slate-300 leading-normal font-medium">
             {{ categories[0].description }}
           </p>
         </div>

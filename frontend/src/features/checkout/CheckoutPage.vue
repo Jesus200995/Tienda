@@ -27,11 +27,11 @@ const step = ref<'form' | 'gateway' | 'success' | 'failure'>('form')
 const orderNumber = ref('')
 
 // Cart values
-const cartItems = computed(() => cartStore.items)
-const cartSubtotal = computed(() => cartStore.cartSubtotal)
-const shippingCost = computed(() => cartStore.shippingCost)
-const cartTotal = computed(() => cartStore.cartTotal)
-const isEmpty = computed(() => cartStore.isEmpty)
+const cartItems = computed(() => cartStore.selectedItems)
+const cartSubtotal = computed(() => cartStore.selectedSubtotal)
+const shippingCost = computed(() => cartStore.selectedShippingCost)
+const cartTotal = computed(() => cartStore.selectedTotal)
+const isEmpty = computed(() => cartStore.selectedCount === 0)
 
 // Proceed to payment gateway simulation
 const handleProceedToPayment = () => {
@@ -89,8 +89,8 @@ const handleSimulatePayment = (status: 'approved' | 'rejected') => {
       existingOrders.unshift(newOrder)
       localStorage.setItem('comerciambre_orders', JSON.stringify(existingOrders))
       
-      // Clear Cart
-      cartStore.clearCart()
+      // Clear purchased items from Cart (Mercado Libre style)
+      cartStore.removeSelected()
       step.value = 'success'
     } else {
       step.value = 'failure'
@@ -100,7 +100,7 @@ const handleSimulatePayment = (status: 'approved' | 'rejected') => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 py-12 selection:bg-secondary selection:text-white">
+  <div class="min-h-screen bg-slate-50 pt-4 sm:pt-6 pb-12 selection:bg-secondary selection:text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       
       <!-- Back to shop link (Form step only) -->
@@ -284,7 +284,7 @@ const handleSimulatePayment = (status: 'approved' | 'rejected') => {
             <CreditCard class="w-6 h-6 text-[#009EE3] flex-shrink-0 mt-0.5" />
             <div class="space-y-1">
               <p class="text-sm font-bold text-primary">Simulador de Pasarela Segura</p>
-              <p class="text-xs text-slate-400 leading-relaxed font-semibold">
+              <p class="text-xs text-slate-400 leading-normal font-semibold">
                 Estás en modo local. Puedes simular el resultado de Mercado Pago presionando cualquiera de los siguientes estados:
               </p>
             </div>
@@ -382,7 +382,7 @@ const handleSimulatePayment = (status: 'approved' | 'rejected') => {
         <div class="flex flex-col items-center space-y-2">
           <AlertCircle class="w-16 h-16 text-danger" />
           <h2 class="text-2xl font-display font-bold text-primary">Pago Rechazado</h2>
-          <p class="text-xs text-slate-400 font-semibold leading-relaxed">
+          <p class="text-xs text-slate-400 font-semibold leading-normal">
             Tu tarjeta no pudo ser procesada. Por favor verifica tus fondos o utiliza otro método de pago de Mercado Pago.
           </p>
         </div>

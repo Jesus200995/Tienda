@@ -37,7 +37,7 @@ const router = useRouter()
           <span class="text-secondary font-light italic">SIN ESFUERZO</span>
         </h1>
         
-        <p class="text-sm sm:text-base text-slate-300 font-medium max-w-sm leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-300 font-medium max-w-sm leading-normal">
           Descubre prendas de corte premium diseñadas para resistir el día a día y expresar tu verdadera identidad urbana.
         </p>
         

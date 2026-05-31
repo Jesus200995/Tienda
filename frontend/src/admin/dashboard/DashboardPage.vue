@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useProductStore } from '../../stores/products'
-import { DollarSign, ShoppingBag, ClipboardList, CheckCircle } from 'lucide-vue-next'
+import { DollarSign, ShoppingCart, ClipboardList, CheckCircle } from 'lucide-vue-next'
 
 const productStore = useProductStore()
 
@@ -33,14 +33,14 @@ const totalOrdersCount = computed(() => allOrders.value.length)
 
 const getStatusBadgeClass = (status: string) => {
   const classes = {
-    pending: 'bg-warning/10 text-warning border border-warning/20',
-    paid: 'bg-success/10 text-success border border-success/20',
-    preparing: 'bg-accent/10 text-accent border border-accent/20',
-    shipped: 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
-    delivered: 'bg-slate-500/10 text-slate-400 border border-slate-500/20',
-    cancelled: 'bg-danger/10 text-danger border border-danger/20'
+    pending: 'bg-amber-50 text-amber-700 border border-amber-200',
+    paid: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    preparing: 'bg-sky-50 text-sky-700 border border-sky-200',
+    shipped: 'bg-indigo-50 text-indigo-700 border border-indigo-200',
+    delivered: 'bg-slate-50 text-slate-700 border border-slate-200',
+    cancelled: 'bg-rose-50 text-rose-700 border border-rose-200'
   }
-  return classes[status as keyof typeof classes] || 'bg-slate-800 text-slate-400'
+  return classes[status as keyof typeof classes] || 'bg-slate-50 text-slate-600 border border-slate-200'
 }
 
 const getStatusTranslation = (status: string) => {
@@ -61,10 +61,10 @@ const getStatusTranslation = (status: string) => {
     
     <!-- Title -->
     <div>
-      <h1 class="text-2xl sm:text-3xl font-display font-black text-white">
+      <h1 class="text-2xl sm:text-3xl font-display font-black text-slate-800">
         Dashboard General
       </h1>
-      <p class="text-xs text-slate-400 mt-1 font-semibold">
+      <p class="text-xs text-slate-500 mt-1 font-semibold">
         Monitorea el rendimiento de El Comerciambre en tiempo real.
       </p>
     </div>
@@ -73,45 +73,45 @@ const getStatusTranslation = (status: string) => {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       
       <!-- Sales stat card -->
-      <div class="bg-[#121324] border border-slate-800 rounded-xl p-6 flex items-center justify-between shadow-soft">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-between shadow-sm">
         <div class="space-y-1">
-          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Ventas totales</span>
-          <span class="block text-2xl font-black text-white">${{ totalSales.toLocaleString() }}</span>
+          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Ventas totales</span>
+          <span class="block text-2xl font-black text-slate-800">${{ totalSales.toLocaleString() }}</span>
         </div>
-        <div class="p-3 bg-success/15 rounded-lg text-success">
+        <div class="p-3 bg-emerald-50 rounded-lg text-emerald-600 border border-emerald-100">
           <DollarSign class="w-6 h-6" />
         </div>
       </div>
 
       <!-- Orders count card -->
-      <div class="bg-[#121324] border border-slate-800 rounded-xl p-6 flex items-center justify-between shadow-soft">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-between shadow-sm">
         <div class="space-y-1">
-          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Pedidos totales</span>
-          <span class="block text-2xl font-black text-white">{{ totalOrdersCount }}</span>
+          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Pedidos totales</span>
+          <span class="block text-2xl font-black text-slate-800">{{ totalOrdersCount }}</span>
         </div>
-        <div class="p-3 bg-secondary/15 rounded-lg text-secondary">
+        <div class="p-3 bg-indigo-50 rounded-lg text-indigo-600 border border-indigo-100">
           <ClipboardList class="w-6 h-6" />
         </div>
       </div>
 
       <!-- Pending orders count card -->
-      <div class="bg-[#121324] border border-slate-800 rounded-xl p-6 flex items-center justify-between shadow-soft">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-between shadow-sm">
         <div class="space-y-1">
-          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Pedidos pendientes</span>
-          <span class="block text-2xl font-black text-white">{{ pendingOrders }}</span>
+          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Pedidos pendientes</span>
+          <span class="block text-2xl font-black text-slate-800">{{ pendingOrders }}</span>
         </div>
-        <div class="p-3 bg-warning/15 rounded-lg text-warning">
-          <ShoppingBag class="w-6 h-6" />
+        <div class="p-3 bg-amber-50 rounded-lg text-amber-600 border border-amber-100">
+          <ShoppingCart class="w-6 h-6" />
         </div>
       </div>
 
       <!-- Active products card -->
-      <div class="bg-[#121324] border border-slate-800 rounded-xl p-6 flex items-center justify-between shadow-soft">
+      <div class="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-between shadow-sm">
         <div class="space-y-1">
-          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Prendas Activas</span>
-          <span class="block text-2xl font-black text-white">{{ activeProductsCount }}</span>
+          <span class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Prendas Activas</span>
+          <span class="block text-2xl font-black text-slate-800">{{ activeProductsCount }}</span>
         </div>
-        <div class="p-3 bg-indigo-500/15 rounded-lg text-indigo-400">
+        <div class="p-3 bg-sky-50 rounded-lg text-sky-600 border border-sky-100">
           <CheckCircle class="w-6 h-6" />
         </div>
       </div>
@@ -119,19 +119,21 @@ const getStatusTranslation = (status: string) => {
     </div>
 
     <!-- Recent Orders list -->
-    <div class="bg-[#121324] border border-slate-800 rounded-xl p-6 shadow-soft space-y-4">
-      <h3 class="text-sm font-bold uppercase tracking-wider text-white">
+    <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800">
         Últimos Pedidos Realizados
       </h3>
       
-      <div v-if="recentOrders.length === 0" class="py-8 text-center text-slate-400 text-xs font-semibold">
+      <div v-if="recentOrders.length === 0" class="py-8 text-center text-slate-450 text-xs font-semibold">
         No se han registrado compras recientemente.
       </div>
       
-      <div v-else class="overflow-x-auto">
-        <table class="w-full text-xs font-semibold text-slate-300">
+      <div v-else>
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-x-auto">
+          <table class="w-full min-w-[550px] text-xs font-semibold text-slate-600">
           <thead>
-            <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px]">
+            <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[9px]">
               <th class="py-3 text-left">Pedido</th>
               <th class="py-3 text-left">Cliente</th>
               <th class="py-3 text-left">Fecha</th>
@@ -139,12 +141,12 @@ const getStatusTranslation = (status: string) => {
               <th class="py-3 text-left">Estado</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-800/40">
+          <tbody class="divide-y divide-slate-100">
             <tr v-for="order in recentOrders" :key="order.id">
-              <td class="py-3.5 font-bold text-white">{{ order.order_number }}</td>
+              <td class="py-3.5 font-bold text-slate-800">{{ order.order_number }}</td>
               <td class="py-3.5">{{ order.shipping_address.name }}</td>
               <td class="py-3.5">{{ new Date(order.created_at).toLocaleDateString() }}</td>
-              <td class="py-3.5 font-bold text-white">${{ order.total.toLocaleString() }}</td>
+              <td class="py-3.5 font-bold text-slate-800">${{ order.total.toLocaleString() }}</td>
               <td class="py-3.5">
                 <span :class="['px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wide font-extrabold', getStatusBadgeClass(order.status)]">
                   {{ getStatusTranslation(order.status) }}
@@ -153,8 +155,33 @@ const getStatusTranslation = (status: string) => {
             </tr>
           </tbody>
         </table>
+        </div>
+
+        <!-- Mobile Stacked Cards -->
+        <div class="md:hidden space-y-3 mt-2">
+          <div 
+            v-for="order in recentOrders" 
+            :key="`mobile-${order.id}`"
+            class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-sm"
+          >
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-black text-slate-800 text-sm">{{ order.order_number }}</p>
+                <p class="text-[10px] text-slate-500">{{ order.shipping_address.name }} &bull; {{ new Date(order.created_at).toLocaleDateString() }}</p>
+              </div>
+              <span :class="['px-2 py-0.5 rounded-md text-[9px] uppercase tracking-wide font-extrabold', getStatusBadgeClass(order.status)]">
+                {{ getStatusTranslation(order.status) }}
+              </span>
+            </div>
+            <div class="flex justify-between items-center border-t border-slate-100 pt-2 mt-1">
+              <span class="text-xs text-slate-500 font-bold">Total Pagado:</span>
+              <span class="font-black text-slate-800">${{ order.total.toLocaleString() }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
 </template>
+

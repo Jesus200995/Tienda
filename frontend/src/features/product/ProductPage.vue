@@ -3,14 +3,16 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '../../stores/products'
 import { useCartStore } from '../../stores/cart'
+import { useNotificationsStore } from '../../stores/notifications'
 import ProductCard from '../../components/shared/ProductCard.vue'
 import BaseButton from '../../components/ui/BaseButton.vue'
-import { ShoppingBag, Check, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-vue-next'
+import { ShoppingCart, Check, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
 const productStore = useProductStore()
 const cartStore = useCartStore()
+const notificationsStore = useNotificationsStore()
 
 const slug = computed(() => route.params.slug as string)
 const product = computed(() => productStore.getProductBySlug(slug.value))
@@ -90,6 +92,7 @@ const handleAddToCart = () => {
   if (!product.value || product.value.stock <= 0) return
   
   cartStore.addItem(product.value, quantity.value, selectedVariant.value)
+  notificationsStore.showCartToast(product.value, selectedVariant.value, quantity.value)
   showAddedSuccess.value = true
   
   setTimeout(() => {
@@ -99,7 +102,7 @@ const handleAddToCart = () => {
 </script>
 
 <template>
-  <div v-if="product" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+  <div v-if="product" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12">
     
     <!-- Go back link -->
     <div class="mb-6 text-left">
@@ -145,7 +148,7 @@ const handleAddToCart = () => {
         </div>
 
         <div class="py-5 border-b border-slate-100">
-          <p class="text-sm text-slate-600 leading-relaxed">
+          <p class="text-sm text-slate-600 leading-normal">
             {{ product.description }}
           </p>
         </div>
@@ -249,7 +252,7 @@ const handleAddToCart = () => {
                 ¡Artículo agregado con éxito!
               </template>
               <template v-else>
-                <ShoppingBag class="w-5 h-5 mr-2" />
+                <ShoppingCart class="w-5 h-5 mr-2" />
                 Añadir a mi Bolsa
               </template>
             </template>

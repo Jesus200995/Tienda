@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import BaseInput from '../../components/ui/BaseInput.vue'
 import BaseButton from '../../components/ui/BaseButton.vue'
-import { ShoppingBag, CheckCircle, Package } from 'lucide-vue-next'
+import { ShoppingCart, CheckCircle, Package, ArrowRight, LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
 
 // State
 const activeTab = ref<'orders' | 'profile'>('orders')
@@ -16,6 +19,15 @@ const address = ref(authStore.user?.address || '')
 const email = ref(authStore.user?.email || '')
 
 const showProfileSuccess = ref(false)
+
+// Tab routing synchronization (Mercado Libre Style)
+watch(() => route.query.tab, (newTab) => {
+  if (newTab === 'profile') {
+    activeTab.value = 'profile'
+  } else {
+    activeTab.value = 'orders'
+  }
+}, { immediate: true })
 
 // Load customer orders from localStorage
 const orders = computed(() => {
@@ -40,9 +52,9 @@ const handleUpdateProfile = () => {
 const getStatusBadgeClass = (status: string) => {
   const classes = {
     pending: 'bg-warning/15 text-warning',
-    paid: 'bg-success/15 text-success',
+    paid: 'bg-emerald-500/15 text-emerald-600',
     preparing: 'bg-accent/15 text-accent',
-    shipped: 'bg-indigo-500/15 text-indigo-500',
+    shipped: 'bg-blue-500/15 text-blue-600',
     delivered: 'bg-slate-500/15 text-slate-500',
     cancelled: 'bg-danger/15 text-danger'
   }
@@ -51,10 +63,10 @@ const getStatusBadgeClass = (status: string) => {
 
 const getStatusTranslation = (status: string) => {
   const statusTranslations = {
-    pending: 'Pendiente',
+    pending: 'Pendiente de Pago',
     paid: 'Pagado',
-    preparing: 'Preparando',
-    shipped: 'Enviado',
+    preparing: 'Preparando Envío',
+    shipped: 'Enviado / En camino',
     delivered: 'Entregado',
     cancelled: 'Cancelado'
   }
@@ -63,7 +75,7 @@ const getStatusTranslation = (status: string) => {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 text-left">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-12 text-left">
     
     <!-- Title -->
     <div class="mb-8">
@@ -81,7 +93,7 @@ const getStatusTranslation = (status: string) => {
     <!-- Navigation Tabs -->
     <div class="flex border-b border-slate-100 mb-8 gap-6 font-bold text-xs uppercase tracking-wider">
       <button 
-        @click="activeTab = 'orders'"
+        @click="router.push({ path: '/account', query: { tab: 'orders' } })"
         :class="[
           'pb-3 border-b-2 transition-all cursor-pointer',
           activeTab === 'orders' ? 'border-secondary text-secondary font-black' : 'border-transparent text-slate-400 hover:text-primary'
@@ -90,7 +102,7 @@ const getStatusTranslation = (status: string) => {
         Mis Pedidos ({{ orders.length }})
       </button>
       <button 
-        @click="activeTab = 'profile'"
+        @click="router.push({ path: '/account', query: { tab: 'profile' } })"
         :class="[
           'pb-3 border-b-2 transition-all cursor-pointer',
           activeTab === 'profile' ? 'border-secondary text-secondary font-black' : 'border-transparent text-slate-400 hover:text-primary'
@@ -106,76 +118,70 @@ const getStatusTranslation = (status: string) => {
       <!-- Empty state -->
       <div v-if="orders.length === 0" class="bg-white border border-slate-100 rounded-lg p-8 text-center space-y-4 shadow-soft py-16">
         <div class="p-4 bg-slate-50 rounded-full text-slate-400 inline-block">
-          <ShoppingBag class="w-8 h-8" />
+          <ShoppingCart class="w-8 h-8" />
         </div>
         <p class="text-sm font-semibold text-primary">No tienes pedidos activos</p>
-        <p class="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+        <p class="text-xs text-slate-400 max-w-xs mx-auto leading-normal">
           ¡Aún no has realizado compras! Visita nuestro catálogo e inicia tu estilo hoy.
         </p>
       </div>
 
-      <!-- Orders listing -->
+      <!-- Orders listing (Mercado Libre Style overview cards) -->
       <div 
         v-else 
         v-for="order in orders" 
         :key="order.id"
-        class="bg-white border border-slate-100 rounded-lg shadow-soft overflow-hidden"
+        class="bg-white border border-slate-100 rounded-2xl shadow-soft overflow-hidden transition-all duration-300 hover:border-slate-200"
       >
         <!-- Header of order card -->
-        <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="px-6 py-4.5 bg-slate-50/50 border-b border-slate-100/70 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div class="flex gap-6">
             <div>
-              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Pedido</p>
-              <p class="font-bold text-primary">{{ order.order_number }}</p>
+              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px] mb-0.5">Pedido</p>
+              <p class="font-bold text-primary">#{{ order.order_number }}</p>
             </div>
             <div>
-              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Fecha</p>
+              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px] mb-0.5">Fecha</p>
               <p class="font-semibold text-slate-600">{{ new Date(order.created_at).toLocaleDateString() }}</p>
             </div>
             <div>
-              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Total</p>
+              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px] mb-0.5">Total</p>
               <p class="font-bold text-primary">${{ order.total.toLocaleString() }}</p>
             </div>
           </div>
           
-          <span :class="['px-2.5 py-0.5 rounded-md font-bold text-[9px] tracking-wider uppercase', getStatusBadgeClass(order.status)]">
+          <span :class="['px-2.5 py-0.75 rounded-md font-bold text-[9px] tracking-wider uppercase', getStatusBadgeClass(order.status)]">
             {{ getStatusTranslation(order.status) }}
           </span>
         </div>
 
-        <!-- Body of order card -->
-        <div class="p-6 space-y-4">
-          <!-- Items List -->
-          <div class="divide-y divide-slate-50 pr-4">
-            <div 
-              v-for="item in order.items" 
-              :key="item.id"
-              class="flex justify-between items-center py-2.5 first:pt-0 last:pb-0 text-xs font-semibold"
-            >
-              <div class="flex items-center gap-2">
-                <Package class="w-4 h-4 text-slate-400" />
-                <span class="text-primary">{{ item.product_name }}</span>
+        <!-- Body of order card (Brief summary & Navigation) -->
+        <div class="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+          <div class="space-y-2 text-xs font-semibold pr-4">
+            <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Prendas del pedido:</p>
+            <div class="flex flex-wrap gap-x-4 gap-y-1.5 text-primary">
+              <span 
+                v-for="item in order.items" 
+                :key="item.id"
+                class="flex items-center gap-1.5"
+              >
+                <Package class="w-3.5 h-3.5 text-slate-400" />
+                {{ item.product_name }}
                 <span class="text-slate-400 font-bold">x{{ item.quantity }}</span>
-              </div>
-              <span class="text-primary">${{ item.total.toLocaleString() }}</span>
+              </span>
             </div>
           </div>
 
-          <div class="h-px bg-slate-100"></div>
-
-          <!-- Shipping details and tracking -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-slate-600">
-            <div>
-              <p class="text-slate-400 font-bold uppercase tracking-wider text-[9px] mb-1">Enviar a:</p>
-              <p class="font-bold text-primary">{{ order.shipping_address.name }}</p>
-              <p class="text-slate-500 leading-normal">{{ order.shipping_address.address }}, {{ order.shipping_address.city }}</p>
-            </div>
-            <div v-if="order.tracking_number" class="bg-indigo-500/5 rounded-md p-3 border border-indigo-500/10 self-start">
-              <p class="text-indigo-500 font-bold uppercase tracking-wider text-[9px] mb-1">Número de Guía:</p>
-              <p class="font-bold text-primary">{{ order.tracking_number }}</p>
-              <p class="text-[10px] text-slate-400 mt-0.5 leading-relaxed font-semibold">Envío rastreable vía paquetería express.</p>
-            </div>
-          </div>
+          <!-- Quick Navigation Link to Detail Page -->
+          <BaseButton 
+            variant="outline" 
+            size="sm" 
+            class="w-full sm:w-auto h-10 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
+            @click="router.push(`/account/orders/${order.id}`)"
+          >
+            Detalle de Pedido
+            <ArrowRight class="w-3.5 h-3.5" />
+          </BaseButton>
         </div>
       </div>
 
@@ -228,7 +234,7 @@ const getStatusTranslation = (status: string) => {
           />
         </div>
 
-        <div class="pt-4 border-t border-slate-50">
+        <div class="pt-4 border-t border-slate-50 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
           <BaseButton 
             type="submit" 
             variant="secondary" 
@@ -236,6 +242,16 @@ const getStatusTranslation = (status: string) => {
           >
             Guardar cambios
           </BaseButton>
+
+          <!-- Mobile friendly logout button -->
+          <button 
+            type="button"
+            @click="() => { authStore.logout(); router.push('/') }"
+            class="w-full sm:w-auto flex items-center justify-center gap-2 py-3 px-6 rounded-lg text-danger font-bold bg-danger/5 border border-danger/10 hover:bg-danger/10 transition-colors cursor-pointer"
+          >
+            <LogOut class="w-4 h-4" />
+            Cerrar Sesión
+          </button>
         </div>
       </form>
     </div>

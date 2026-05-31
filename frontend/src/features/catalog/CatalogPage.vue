@@ -76,10 +76,16 @@ const handleResetFilters = () => {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12">
     
     <!-- Top banner / Breadcrumb -->
     <div class="mb-8 text-left">
+      <button 
+        @click="$router.back()"
+        class="inline-flex items-center text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-primary transition-colors cursor-pointer mb-4"
+      >
+        <span class="mr-1.5 font-bold text-lg leading-none">&larr;</span> Regresar
+      </button>
       <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">
         Colección Permanente
       </span>

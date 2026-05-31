@@ -10,6 +10,7 @@ const CartPage = () => import('../features/cart/CartPage.vue')
 const AuthPage = () => import('../features/auth/AuthPage.vue')
 const CheckoutPage = () => import('../features/checkout/CheckoutPage.vue')
 const AccountPage = () => import('../features/account/AccountPage.vue')
+const FlashSalesPage = () => import('../features/offers/FlashSalesPage.vue')
 
 // Admin components
 const AdminLayout = () => import('../layouts/AdminLayout.vue')
@@ -18,6 +19,7 @@ const ProductsPage = () => import('../admin/products/ProductsPage.vue')
 const CategoriesPage = () => import('../admin/categories/CategoriesPage.vue')
 const OrdersPage = () => import('../admin/orders/OrdersPage.vue')
 const SettingsPage = () => import('../admin/settings/SettingsPage.vue')
+const OffersPage = () => import('../admin/offers/OffersPage.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -50,6 +52,18 @@ const routes: RouteRecordRaw[] = [
         name: 'account',
         component: AccountPage,
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'account/orders/:id',
+        name: 'order-detail',
+        component: () => import('../features/account/OrderDetailPage.vue'),
+        meta: { requiresAuth: true },
+        props: true
+      },
+      {
+        path: 'ofertas-relampago',
+        name: 'flash-sales',
+        component: FlashSalesPage
       }
     ]
   },
@@ -98,6 +112,11 @@ const routes: RouteRecordRaw[] = [
         path: 'settings',
         name: 'admin-settings',
         component: SettingsPage
+      },
+      {
+        path: 'offers',
+        name: 'admin-offers',
+        component: OffersPage
       }
     ]
   },

@@ -2,8 +2,9 @@
 import { ref, computed } from 'vue'
 import type { Product, ProductVariant } from '../../types'
 import { useCartStore } from '../../stores/cart'
+import { useNotificationsStore } from '../../stores/notifications'
 import BaseButton from '../ui/BaseButton.vue'
-import { ShoppingBag, Check } from 'lucide-vue-next'
+import { ShoppingCart, Check } from 'lucide-vue-next'
 
 interface Props {
   product: Product
@@ -13,6 +14,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['close'])
 
 const cartStore = useCartStore()
+const notificationsStore = useNotificationsStore()
 
 // State
 const selectedSize = ref('')
@@ -66,6 +68,7 @@ const handleAddToCart = () => {
   if (props.product.stock <= 0) return
   
   cartStore.addItem(props.product, quantity.value, selectedVariant.value)
+  notificationsStore.showCartToast(props.product, selectedVariant.value, quantity.value)
   showAddedSuccess.value = true
   
   setTimeout(() => {
@@ -105,7 +108,7 @@ const handleAddToCart = () => {
           </span>
         </div>
         
-        <p class="text-sm text-slate-600 leading-relaxed mt-4">
+        <p class="text-sm text-slate-600 leading-normal mt-4">
           {{ product.description }}
         </p>
       </div>
@@ -202,7 +205,7 @@ const handleAddToCart = () => {
             ¡Agregado con éxito!
           </template>
           <template v-else>
-            <ShoppingBag class="w-5 h-5 mr-2" />
+            <ShoppingCart class="w-5 h-5 mr-2" />
             Añadir al carrito
           </template>
         </BaseButton>

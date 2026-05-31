@@ -2,8 +2,10 @@
 import { computed, ref } from 'vue'
 import type { Product } from '../../types'
 import { useCartStore } from '../../stores/cart'
+import { useNotificationsStore } from '../../stores/notifications'
+import QuickVariantSelector from './QuickVariantSelector.vue'
 import BaseButton from '../ui/BaseButton.vue'
-import { Eye, ShoppingBag } from 'lucide-vue-next'
+import { Eye, ShoppingCart } from 'lucide-vue-next'
 
 interface Props {
   product: Product
@@ -13,7 +15,9 @@ const props = defineProps<Props>()
 const emit = defineEmits(['quick-view'])
 
 const cartStore = useCartStore()
+const notificationsStore = useNotificationsStore()
 const hovered = ref(false)
+const showSelector = ref(false)
 
 const primaryImage = computed(() => {
   return props.product.images.find((img: any) => img.is_primary)?.url || props.product.images[0]?.url || '/placeholder.png'
@@ -36,13 +40,17 @@ const discount = computed(() => {
 
 const handleAddToCart = (e: Event) => {
   e.stopPropagation()
-  // Add product to cart with default variant if available
-  const defaultVariant = props.product.variants[0]
-  cartStore.addItem(props.product, 1, defaultVariant)
   
-  // Custom micro-animation event or toast triggers automatically via cart count change
+  if (props.product.variants && props.product.variants.length > 1) {
+    showSelector.value = true
+  } else {
+    const defaultVariant = props.product.variants?.[0]
+    cartStore.addItem(props.product, 1, defaultVariant)
+    notificationsStore.showCartToast(props.product, defaultVariant, 1)
+  }
 }
 </script>
+
 
 <template>
   <div 
@@ -90,7 +98,7 @@ const handleAddToCart = (e: Event) => {
             class="flex-1 cursor-pointer"
             @click.prevent="handleAddToCart"
           >
-            <ShoppingBag class="w-4 h-4 mr-1.5 text-white" />
+            <ShoppingCart class="w-4 h-4 mr-1.5 text-white" />
             Añadir
           </BaseButton>
         </div>
@@ -124,9 +132,16 @@ const handleAddToCart = (e: Event) => {
           class="md:hidden p-2 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-100 text-primary transition-all duration-300 cursor-pointer"
           aria-label="Agregar al carrito"
         >
-          <ShoppingBag class="w-4 h-4" />
+          <ShoppingCart class="w-4 h-4" />
         </button>
       </div>
     </div>
+
+    <!-- Quick Variant Selector Popup Modal -->
+    <QuickVariantSelector 
+      :product="product" 
+      :show="showSelector" 
+      @close="showSelector = false" 
+    />
   </div>
 </template>

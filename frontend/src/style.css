@@ -12,9 +12,9 @@
   --color-warning: #f39c12;        /* Amarillo advertencia */
   --color-danger: #e74c3c;         /* Rojo error */
   
-  /* Tipografía premium */
-  --font-display: "Playfair Display", serif;  /* Títulos elegantes */
-  --font-body: "Inter", sans-serif;           /* Cuerpo legible */
+  /* Tipografía premium moderna */
+  --font-display: "Outfit", sans-serif;         /* Títulos ultra modernos */
+  --font-body: "Plus Jakarta Sans", sans-serif; /* Cuerpo suave y legible */
   
   /* Espaciado y bordes consistentes */
   --radius-sm: 0.375rem;

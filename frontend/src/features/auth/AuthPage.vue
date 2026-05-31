@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/auth'
 import { useRoute, useRouter } from 'vue-router'
 import BaseInput from '../../components/ui/BaseInput.vue'
 import BaseButton from '../../components/ui/BaseButton.vue'
-import { ShieldAlert, ArrowLeft, Key } from 'lucide-vue-next'
+import { ShieldAlert, ArrowLeft, Key, ShoppingCart, Shield } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -34,7 +34,11 @@ const handleSubmit = async () => {
     
     const success = await authStore.login(email.value, password.value)
     if (success) {
-      router.push(redirectPath.value)
+      if (authStore.isAdmin) {
+        router.push({ name: 'admin-dashboard' })
+      } else {
+        router.push(redirectPath.value)
+      }
     }
   } else {
     if (!name.value || !email.value || !password.value) {
@@ -68,7 +72,11 @@ const quickLogin = async (role: 'admin' | 'customer') => {
   // Auto submit
   const success = await authStore.login(email.value, password.value)
   if (success) {
-    router.push(redirectPath.value)
+    if (authStore.isAdmin) {
+      router.push({ name: 'admin-dashboard' })
+    } else {
+      router.push(redirectPath.value)
+    }
   }
 }
 </script>
@@ -92,7 +100,9 @@ const quickLogin = async (role: 'admin' | 'customer') => {
       
       <!-- Logo & Title -->
       <div class="text-center">
-        <span class="text-3xl select-none">🛍️</span>
+        <div class="flex justify-center mb-2 text-secondary">
+          <ShoppingCart class="w-10 h-10" />
+        </div>
         <h2 class="text-2xl font-display font-black tracking-wider text-primary mt-2 uppercase">
           El Comerciambre
         </h2>
@@ -189,21 +199,21 @@ const quickLogin = async (role: 'admin' | 'customer') => {
           <Key class="w-4 h-4 text-secondary" />
           <span>Acceso Rápido (Pruebas)</span>
         </div>
-        <p class="text-[10px] text-slate-400 font-semibold leading-relaxed">
+        <p class="text-[10px] text-slate-400 font-semibold leading-normal">
           Usa estos accesos directos para probar ambos roles inmediatamente:
         </p>
         <div class="grid grid-cols-2 gap-3">
           <button 
             @click="quickLogin('customer')"
-            class="px-3 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-[10px] font-bold rounded-md text-primary transition-all text-center cursor-pointer shadow-xs"
+            class="px-3 py-2 flex items-center justify-center gap-1.5 bg-white hover:bg-slate-100 border border-slate-200 text-[10px] font-bold rounded-md text-primary transition-all text-center cursor-pointer shadow-xs"
           >
-            🔑 Cliente Prueba
+            <Key class="w-3.5 h-3.5 text-secondary" /> Cliente Prueba
           </button>
           <button 
             @click="quickLogin('admin')"
-            class="px-3 py-2 bg-primary hover:bg-opacity-90 border border-transparent text-[10px] font-bold rounded-md text-white transition-all text-center cursor-pointer shadow-xs"
+            class="px-3 py-2 flex items-center justify-center gap-1.5 bg-primary hover:bg-opacity-90 border border-transparent text-[10px] font-bold rounded-md text-white transition-all text-center cursor-pointer shadow-xs"
           >
-            🛡️ Admin Prueba
+            <Shield class="w-3.5 h-3.5" /> Admin Prueba
           </button>
         </div>
       </div>
